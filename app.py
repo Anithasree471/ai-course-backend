@@ -8,10 +8,19 @@ from services.ai_generator import generate_course
 import os
 import traceback
 
+
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "https://ai-course-backend-934m.onrender.com",
+            "http://localhost:5173"
+            "http://127.0.0.1:5173"
+        ]
+    }
+})
 
 # ---------------------------
 # MongoDB Connection
