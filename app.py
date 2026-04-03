@@ -12,7 +12,14 @@ import traceback
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, supports_credentials=True)
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://ai-course-frontend-olive.vercel.app"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    return response
 # ---------------------------
 # MongoDB Connection
 # ---------------------------
@@ -167,8 +174,11 @@ def login():
 # ---------------------------
 # GENERATE + SAVE COURSE API
 # ---------------------------
-@app.route("/generate", methods=["POST"])
+@app.route("/generate", methods=["POST", "OPTIONS"])
 def generate():
+    if request.method == "OPTIONS":
+        return jsonify({"message": "OK"}), 200
+
     data = request.get_json()
     topic = data.get("topic")
     user_id = data.get("user_id")
