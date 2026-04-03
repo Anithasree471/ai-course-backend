@@ -12,7 +12,7 @@ import traceback
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 # ---------------------------
 # MongoDB Connection
 # ---------------------------
